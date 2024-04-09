@@ -21,7 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MyAccessibilityService";
+    private static final String TAG = "MyAccessibilityServiceee";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (!tasks.isEmpty()) {
             ComponentName topActivity = tasks.get(0).topActivity;
-            //Log.d(TAG, "Top Activity: " + topActivity.getClassName());
+            Log.d(TAG, "Top Activity: " + topActivity.getClassName());
         } else {
-            //Log.d(TAG, "No running tasks found");
+            Log.d(TAG, "No running tasks found");
         }
 
         allowPermission.setOnClickListener(new View.OnClickListener() {
