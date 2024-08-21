@@ -3,9 +3,11 @@ package com.example.testebuttonback;
 import android.accessibilityservice.AccessibilityButtonController;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.accessibilityservice.GestureDescription;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.graphics.Path;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
@@ -36,7 +38,7 @@ public class MyAccessibilityService extends AccessibilityService {
 
 
         if (event.getSource() != null){
-            //Log.d(TAG, "nome do botão: " + event.getSource().toString());
+            Log.d(TAG, "nome do botão: " + event.getSource().toString());
             if (event.getSource().getContentDescription() != null){
                 if (event.getSource().getContentDescription().equals("Voltar")){
                     Log.d(TAG, "clicou no voltar");
@@ -91,8 +93,41 @@ public class MyAccessibilityService extends AccessibilityService {
         info.notificationTimeout = 100;
 
         this.setServiceInfo(info);
+
+        injectClick(1144, 143);
     }
+
+
+
+    private void injectClick(float x, float y) {
+        Path clickPath = new Path();
+        clickPath.moveTo(x, y);
+
+        GestureDescription.StrokeDescription strokeDescription = new GestureDescription.StrokeDescription(clickPath, 0, 100);
+        GestureDescription.Builder gestureBuilder = new GestureDescription.Builder();
+        gestureBuilder.addStroke(strokeDescription);
+        GestureDescription gesture = gestureBuilder.build();
+
+        boolean result = dispatchGesture(gesture, new AccessibilityService.GestureResultCallback() {
+            @Override
+            public void onCompleted(GestureDescription gestureDescription) {
+                super.onCompleted(gestureDescription);
+                Log.d(TAG, "Gesture Completed");
+            }
+
+            @Override
+            public void onCancelled(GestureDescription gestureDescription) {
+                super.onCancelled(gestureDescription);
+                Log.d(TAG, "Gesture Cancelled");
+            }
+        }, null);
+
+        Log.d(TAG, "Gesture Dispatched: " + result);
+    }
+
+
 }
+
 
 
 
